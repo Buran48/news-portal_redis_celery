@@ -1,0 +1,51 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+статьи
+{% endblock title %}
+
+{% block content %}
+    <h1>все статьи</h1>
+
+    {% if articles %}
+        <p>найдено статей: {{ paginator.count }}</p>
+
+        {% for post in articles %}
+            <div class="news-item">
+                <h2>
+                    <a href="/news/articles/{{ post.id }}/">{{ post.title }}</a>
+                    <span class="article-badge">статья</span>
+                </h2>
+                <p>
+                    <strong>дата:</strong> {{ post.created_at|date:"d.m.Y H:i" }} |
+                    <strong>автор:</strong> {{ post.author.user.username }} |
+                    <strong>рейтинг:</strong> {{ post.rating }}
+                </p>
+                <p>{{ post.preview }}</p>
+            </div>
+        {% endfor %}
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+                {% endif %}
+
+                <span class="current">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+
+    {% else %}
+        <div class="news-item">
+            <p>ничего нет</p>
+        </div>
+    {% endif %}
+{% endblock content %}

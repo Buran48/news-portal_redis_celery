@@ -1,0 +1,25 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<h2>страница авторизованного пользователя {{request.user.username}}</h2>
+<div>личные данные пользователя</div>
+
+<div>
+    <h3>мои подписки</h3>
+    {% if request.user.categories.all %}
+        <p>подписан на:
+        {% for category in request.user.categories.all %}
+            {{ category.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </p>
+    {% else %}
+        <p>нет активных подписок</p>
+    {% endif %}
+</div>
+
+{% if is_not_author %}
+<button> <a href="/accounts/upgrade/">стать автором!</a> </button>
+{% endif %}
+
+<button> <a href="/accounts/logout/">выйти</a> </button>
+{% endblock %}

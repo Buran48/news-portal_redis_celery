@@ -1,0 +1,25 @@
+{% extends "account/base.html" %}
+
+{% block inner %}
+<h2>войти в систему</h2>
+
+<form method="post" action="{% url 'account_login' %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>почта:</td>
+    <td>{{ form.login }}</td>
+</tr>
+<tr>
+    <td>пароль:</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<input type="submit" value="войти">
+</form>
+
+<p>Или войдите через: <a href="/accounts/google/login/">Google</a></p>
+
+<button><a href="/accounts/signup/">регистрация</a></button>
+{% endblock %}

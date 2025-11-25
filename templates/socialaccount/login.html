@@ -1,0 +1,13 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h2>вход через Google</h2>
+<p>вы собираетесь войти с помощью учетной записи Google.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">продолжить с Google</button>
+</form>
+
+<p><a href="/accounts/login/">назад к обычному входу</a></p>
+{% endblock %}

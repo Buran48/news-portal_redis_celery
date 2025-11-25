@@ -1,0 +1,11 @@
+{% extends "account/base.html" %}
+
+{% block inner %}
+<h2> Регистрация </h2>
+
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Продолжить">
+</form>
+{% endblock %}

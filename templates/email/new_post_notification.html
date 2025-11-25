@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>новая публикация</title>
+</head>
+<body>
+    {% load custom_filters %}
+    <h2>{{ post.title|censor }}</h2>
+    <p>{{ post.content|truncatechars:50|censor }}</p>
+    <p>Здравствуй, {{ username }}. Добавлена новая публикация</p>
+</body>
+</html>

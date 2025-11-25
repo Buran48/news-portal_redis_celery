@@ -1,0 +1,93 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+    {% if request.path == '/news/' %}новости
+    {% else %}статьи
+    {% endif %}
+{% endblock title %}
+
+{% block content %}
+    {% if request.path == '/news/' %}
+        <h1>все новости</h1>
+    {% else %}
+        <h1>все статьи</h1>
+    {% endif %}
+
+    <h3>{% current_time '%d.%m.%Y' %}</h3>
+
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="найти" />
+    </form>
+
+    <hr>
+
+    {% if posts %}
+        <p>всего: {{ posts|length }}</p>
+        <table>
+            <tr>
+                <td>заголовок</td>
+                <td>дата</td>
+                <td>текст</td>
+                <td>автор</td>
+                <td>рейтинг</td>
+                <td>действия</td>
+                <td>подписка</td>
+            </tr>
+
+            {% for post in posts %}
+            <tr>
+                <td>
+                    {% if request.path == '/news/' %}
+                        <a href="{% url 'news_detail' post.id %}">
+                            {{ post.title|censor }}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'article_detail' post.id %}">
+                            {{ post.title|censor }}
+                        </a>
+                    {% endif %}
+                </td>
+                <td>{{ post.created_at|date:'d.m.Y' }}</td>
+                <td>{{ post.content|censor|truncatewords:20 }}</td>
+                <td>{{ post.author.user.username }}</td>
+                <td>{{ post.rating }}</td>
+                <td>
+                    {% if request.path == '/news/' %}
+                        <a href="{% url 'news_edit' post.id %}">изменить новость</a>
+                        <a href="{% url 'news_delete' post.id %}">удалить новость</a>
+                    {% else %}
+                        <a href="{% url 'article_edit' post.id %}">изменить статью</a>
+                        <a href="{% url 'article_delete' post.id %}">удалить статью</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% for category in post.categories.all %}
+                        <a href="{% url 'subscribe' category.id %}">подписаться на {{ category.name }}</a><br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if page_obj.has_previous %}
+            <a href="?{% url_replace page=1 %}">первая</a>
+            ...
+            <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+
+        {{ page_obj.number }}
+
+        {% if page_obj.has_next %}
+            <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+            ...
+            <a href="?{% url_replace page=page_obj.paginator.num_pages %}">последняя</a>
+        {% endif %}
+
+    {% else %}
+        <h2>ничего не нашли</h2>
+    {% endif %}
+{% endblock content %}
